@@ -12,12 +12,11 @@ exports.handler = async function(event) {
       return { statusCode: 400, body: JSON.stringify({ result: "No text provided" }) };
     }
 
-    // System prompt for proofreading
     const systemPrompt =
       "You are an expert book editor. Review the passage and rewrite it with corrections for grammar, spelling, and stylistic clarity. Only respond with the corrected text.";
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4-turbo", // or "gpt-3.5-turbo"
+      model: "gpt-4-turbo",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: text },
