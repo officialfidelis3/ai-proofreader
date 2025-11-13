@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Proofreader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>AI Proofreader</h2>
+    <textarea id="inputText" rows="10" placeholder="Paste or type your text here..."></textarea>
+    <button id="proofreadBtn">Proofread</button>
+    <h3>Corrected Output:</h3>
+    <div id="result"></div>
+  </div>
+  <script>
+    document.getElementById('proofreadBtn').onclick = async function() {
+      const inp = document.getElementById('inputText').value;
+      const btn = document.getElementById('proofreadBtn');
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = "Proofreading...";
+      btn.disabled = true;
+      try {
+        const res = await fetch('/.netlify/functions/proofread', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: inp }),
+        });
+        const data = await res.json();
+        resultDiv.textContent = data.result || data.error || 'No response';
+      } catch (e) {
+        resultDiv.textContent = "Error: " + e.message;
+      }
+      btn.disabled = false;
+    }
+  </script>
+</body>
+</html>
